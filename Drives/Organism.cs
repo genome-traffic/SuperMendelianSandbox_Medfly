@@ -141,10 +141,27 @@ namespace DrivesMedfly
             if (this.MaternalTRA == false)
             {return "male";}
 
-            if (this.AllelePresent("TRA", "WT") || this.AllelePresent("TRA", "R1"))
+            if (this.AllelePresent("TRA", "R1"))
             {return sex;}
             else
-            {return "male";}
+            {
+                //dominant somatic masculinization
+                if (this.AlleleHeterozygous("TRA", "WT", "TRA", "Construct"))
+                {
+                    if (this.GetTransgeneLevel("transgene_TRA") > 0)
+                    {
+                        int Cas9level = this.GetTransgeneLevel("transgene_Cas9");
+
+                        if (Cas9level >= Simulation.random.Next(0, 101))
+                        {
+                            return "male";
+                        }
+                        else {return sex;}
+                    }
+                    else { return sex; }
+                }
+                else { return sex; }
+            }
 
 
         }
