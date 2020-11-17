@@ -41,7 +41,7 @@ namespace DrivesMedfly
         { 
             string pathdesktop = (string)Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             pathdesktop = pathdesktop + "/model";
-            string pathString = System.IO.Path.Combine(pathdesktop, "Output_white_tra.csv");
+            string pathString = System.IO.Path.Combine(pathdesktop, "Output_ffer.csv");
             Console.WriteLine("Writing output to: " + pathString);
             File.Create(pathString).Dispose();
 
