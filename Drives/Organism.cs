@@ -251,9 +251,6 @@ namespace DrivesMedfly
             //    { fer = 0; }
             //}
 
-            //white
-            if (!(this.AllelePresent("FFER", "WT")))
-            { fer = 95; }
 
             float ffer = (float) fer / 100;
             return ffer;

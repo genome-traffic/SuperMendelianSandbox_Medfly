@@ -41,7 +41,7 @@ namespace DrivesMedfly
         { 
             string pathdesktop = (string)Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             pathdesktop = pathdesktop + "/model";
-            string pathString = System.IO.Path.Combine(pathdesktop, "Output_white_tra.csv");
+            string pathString = System.IO.Path.Combine(pathdesktop, "Output_tra.csv");
             Console.WriteLine("Writing output to: " + pathString);
             File.Create(pathString).Dispose();
 
@@ -261,10 +261,9 @@ namespace DrivesMedfly
         {
             Organism FFD_Male = new Organism(GenerateWTMale());
 
-            GeneLocus FFD = new GeneLocus("FFER", 1, "Construct");
+            GeneLocus FFD = new GeneLocus("TRA", 1, "Construct");
             FFD.Traits.Add("transgene_Cas9", 95);
             FFD.Traits.Add("transgene_TRA", 1);
-            FFD.Traits.Add("transgene_FFER", 1);
             FFD.Traits.Add("Hom_Repair", 95);
 
             Organism.ModifyAllele(ref FFD_Male.ChromosomeListA, FFD, "WT");
