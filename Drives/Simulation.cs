@@ -263,7 +263,7 @@ namespace DrivesMedfly
 
             GeneLocus FFD = new GeneLocus("FFER", 1, "Construct");
             FFD.Traits.Add("transgene_Cas9", 95);
-            FFD.Traits.Add("transgene_TRA", 1);
+            FFD.Traits.Add("transgene_TRA", 0);
             FFD.Traits.Add("transgene_FFER", 1);
             FFD.Traits.Add("Hom_Repair", 95);
 
