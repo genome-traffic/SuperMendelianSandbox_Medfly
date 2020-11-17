@@ -190,18 +190,15 @@ namespace DrivesMedfly
 
             for (int i = 0; i < 60; i++)
             {
-                //Adults.Add(new Organism(GenerateZPG_Aper1_DriveMale()));
-                //Adults.Add(new Organism(GenerateZPG_AP2_DriveMale()));
-                //Adults.Add(new Organism(GenerateZPG_CP_DriveMale()));
+                Adults.Add(new Organism(Generate_DriveMale()));
             }
-
         }
 
         public void Intervention()
         {
             for (int i = 0; i < InterventionReleaseNumber; i++)
             {
-                Adults.Add(new Organism(GenerateFF_DriveMale()));
+                Adults.Add(new Organism(Generate_DriveMale()));
             }
         }
 
@@ -260,7 +257,7 @@ namespace DrivesMedfly
             return WTMale;
         }
 
-        public Organism GenerateFF_DriveMale()
+        public Organism Generate_DriveMale()
         {
             Organism FFD_Male = new Organism(GenerateWTMale());
 
