@@ -20,17 +20,17 @@ namespace DrivesMedfly
         public int Generations = 20;
         public int Iterations = 100;
 
-        public int PopulationCap = 400;
+        public int PopulationCap = 500;
         public float Mortality = 0.1f;
-        public int GlobalEggsPerFemale = 80;
+        public int GlobalEggsPerFemale = 50;
         public int Sample = 47;
 
         public bool ApplyIntervention = true;
-        public int StartingNumberOfWTFemales = 200;
-        public int StartingNumberOfWTMales = 200;
+        public int StartingNumberOfWTFemales = 250;
+        public int StartingNumberOfWTMales = 250;
         public int StartIntervention = 2;
         public int EndIntervention = 2;
-        public int InterventionReleaseNumber = 100;
+        public int InterventionReleaseNumber = 125;
 
         string[] Track = {"TRA","FFER"};
         //string[] Track = { "ZPG" };
@@ -41,7 +41,7 @@ namespace DrivesMedfly
         { 
             string pathdesktop = (string)Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             pathdesktop = pathdesktop + "/model";
-            string pathString = System.IO.Path.Combine(pathdesktop, "Output_white_tra.csv");
+            string pathString = System.IO.Path.Combine(pathdesktop, "Output_ffer_tra.csv");
             Console.WriteLine("Writing output to: " + pathString);
             File.Create(pathString).Dispose();
 

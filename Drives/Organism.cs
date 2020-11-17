@@ -241,19 +241,19 @@ namespace DrivesMedfly
             int fer = 100;
 
             // recessive female fertility
-            //if (this.GetSex() == "female")
-            //{
-            //    if (this.AlleleHomozygous("FFER", "Construct"))
-            //    { fer = 0; }
-            //    else if (this.AlleleHomozygous("FFER", "R2"))
-            //    { fer = 0; }
-            //    else if (this.AlleleHeterozygous("FFER", "Construct", "FFER", "R2"))
-            //    { fer = 0; }
-            //}
+            if (this.GetSex() == "female")
+            {
+                if (this.AlleleHomozygous("FFER", "Construct"))
+                { fer = 0; }
+                else if (this.AlleleHomozygous("FFER", "R2"))
+                { fer = 0; }
+                else if (this.AlleleHeterozygous("FFER", "Construct", "FFER", "R2"))
+                { fer = 0; }
+            }
 
             //white
-            if (!(this.AllelePresent("FFER", "WT")))
-            { fer = 95; }
+            //if (!(this.AllelePresent("FFER", "WT")))
+            //{ fer = 95; }
 
             float ffer = (float) fer / 100;
             return ffer;
