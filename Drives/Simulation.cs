@@ -214,10 +214,10 @@ namespace DrivesMedfly
             FFERb.Traits.Add("Hom_Repair", 95);
 
             GeneLocus TRAa = new GeneLocus("TRA", 2, "WT");
-            TRAa.Traits.Add("Conservation", 100);
+            TRAa.Traits.Add("Conservation", 99);
             TRAa.Traits.Add("Hom_Repair", 95);
             GeneLocus TRAb = new GeneLocus("TRA", 2, "WT");
-            TRAb.Traits.Add("Conservation",100);
+            TRAb.Traits.Add("Conservation",99);
             TRAb.Traits.Add("Hom_Repair", 95);
 
             Chromosome ChromXa = new Chromosome("X", "Sex");
