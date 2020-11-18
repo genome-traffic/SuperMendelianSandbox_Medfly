@@ -151,17 +151,20 @@ namespace DrivesMedfly
                     if (this.GetTransgeneLevel("transgene_TRA") > 0)
                     {
                         int Cas9level = this.GetTransgeneLevel("transgene_Cas9");
-
+                        //Cas9level = 0;
                         if (Cas9level >= Simulation.random.Next(0, 101))
                         {
                             return "male";
                         }
-                        else {return sex;}
                     }
-                    else { return sex; }
                 }
-                else { return sex; }
             }
+
+            if (this.AllelePresent("TRA", "WT"))
+            { return sex; }
+            else
+            { return "male"; }
+
 
 
         }
