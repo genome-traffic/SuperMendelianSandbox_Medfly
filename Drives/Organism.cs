@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace DrivesMedfly
 {
@@ -114,6 +115,35 @@ namespace DrivesMedfly
             }
         }
 
+
+        public string GetSexChromKaryo()
+        {
+            string karyo = "";
+          
+            //role of sex chromosomes
+            foreach (Chromosome Chrom in this.ChromosomeListA)
+            {
+                if (Chrom.HomologousPairName == "Sex")
+                {
+                    karyo = Chrom.ChromosomeName;
+                    break;
+                }
+            }
+
+            foreach (Chromosome Chrom in this.ChromosomeListB)
+            {
+                if (Chrom.HomologousPairName == "Sex")
+                {
+                    karyo += Chrom.ChromosomeName;
+                    break;
+                }
+            }
+            
+            return karyo;
+            
+        }
+
+
         public string GetSex()
         {
             string sex = "female";
@@ -124,7 +154,8 @@ namespace DrivesMedfly
                 foreach (GeneLocus GL in Chrom.GeneLocusList)
                 {
                     if (GL.GeneName == "MaleDeterminingLocus" && GL.AlleleName == "WT")
-                        sex = "male";
+                    sex = "male";
+                    goto TRArole;
                 }
             }
 
@@ -133,11 +164,13 @@ namespace DrivesMedfly
                 foreach (GeneLocus GL in Chrom.GeneLocusList)
                 {
                     if (GL.GeneName == "MaleDeterminingLocus" && GL.AlleleName == "WT")
-                        sex = "male";
+                    sex = "male";
+                    goto TRArole;
                 }
             }
 
-            //role of tra
+            TRArole: //role of tra
+
             if (this.MaternalTRA == false)
             {return "male";}
 
@@ -148,6 +181,9 @@ namespace DrivesMedfly
 
 
         }
+
+
+
         public string GetGenotype(string WhichGene)
         {
             string output = "error";
