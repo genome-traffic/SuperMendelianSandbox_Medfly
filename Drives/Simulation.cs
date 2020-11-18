@@ -131,6 +131,42 @@ namespace DrivesMedfly
                         Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex", "Males", "NA", numberofallmales, "all");
                         Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex", "Females", "NA", numberofallfemales, "all");
 
+                        //------------------------- Sex Karyotype -----------
+                        int numberofXX = 0;
+                        int numberofXY = 0;
+                        foreach (Organism O in Adults)
+                        {
+
+                            switch (O.GetSexChromKaryo())
+                            {
+                                case "XX":
+                                    {
+                                        numberofXX++;
+                                        break;
+                                    }
+                                case "XY":
+                                    {
+                                        numberofXY++;
+                                        break;
+                                    }
+                                case "YX":
+                                    {
+                                        numberofXY++;
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        Console.WriteLine(O.GetSexChromKaryo() + " should not exist!");
+                                        break;
+                                    }
+                            }
+
+                        }
+                        Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex_Karyotype", "XX", "NA", numberofXX, "all");
+                        Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex_Karyotype", "XY", "NA", numberofXY, "all");
+
+
+
                         #endregion
 
                         Shuffle.ShuffleList(Adults);
