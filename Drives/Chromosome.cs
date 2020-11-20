@@ -172,15 +172,137 @@ namespace DrivesMedfly
         public Chromosome(Chromosome HomChrom1, Chromosome HomChrom2, Organism parent)
         {
             int Cas9level = parent.GetTransgeneLevel("transgene_Cas9");
-            int TRAgRNAlevel = parent.GetTransgeneLevel("transgene_TRA");
+            int XarrayRNAlevel = parent.GetTransgeneLevel("transgene_Xarray");
             int FFERgRNAlevel = parent.GetTransgeneLevel("transgene_FFER");
+            int TRAgRNAlevel = parent.GetTransgeneLevel("transgene_TRA");
 
             if (HomChrom1.HomologousPairName != HomChrom2.HomologousPairName)
             { throw new System.ArgumentException("Not homologous Chromosomes", "warning"); }
 
-
             if (HomChrom1.HomologousPairName == "Sex")
             {
+                if (parent.GetSex() == "female")
+                { goto FairSex; }
+
+                if (XarrayRNAlevel < 1)
+                { goto FairSex; }
+
+                int distortion = 0;
+
+                if (HomChrom1.ChromosomeName == "X")
+                {
+                    for (var i = 0; i < HomChrom1.GeneLocusList.Count; i++)
+                    {
+                        if (HomChrom1.GeneLocusList[i].GeneName == "Xarray")
+                        {
+                            HomChrom1.GeneLocusList[i].Traits.TryGetValue("Distortion", out distortion);
+                            var max = (Cas9level > distortion) ? distortion : Cas9level;
+
+                            if (max >= Simulation.random.Next(0, 101) && HomChrom1.GeneLocusList[i].AlleleName == "WT")
+                            {
+                                //inherit the Y
+                                this.ChromosomeName = HomChrom2.ChromosomeName;
+                                this.HomologousPairName = HomChrom2.HomologousPairName;
+                                this.GeneLocusList = new List<GeneLocus>();
+
+                                foreach (GeneLocus OldGL in HomChrom2.GeneLocusList)
+                                {
+                                    GeneLocus NewGL = new GeneLocus(OldGL);
+                                    this.GeneLocusList.Add(NewGL);
+                                }
+                                return;
+                            }
+                            else
+                            {
+                                //inherit the (modified) X
+                                this.ChromosomeName = HomChrom1.ChromosomeName;
+                                this.HomologousPairName = HomChrom1.HomologousPairName;
+                                this.GeneLocusList = new List<GeneLocus>();
+
+                                foreach (GeneLocus OldGL in HomChrom1.GeneLocusList)
+                                {
+                                    GeneLocus NewGL = new GeneLocus(OldGL);
+                                    if (NewGL.GeneName == "Xarray" && NewGL.AlleleName == "WT")
+                                    {
+                                        distortion = distortion - 5;
+                                        if (distortion < 0)
+                                        {
+                                            distortion = 0;
+                                            NewGL.AlleleName = "R2";
+                                        }
+
+                                        NewGL.Traits["Distortion"] = distortion;
+
+                                    }
+                                    this.GeneLocusList.Add(NewGL);
+                                }
+                                return;
+                            }
+                        }
+                    }
+                }
+                else if (HomChrom2.ChromosomeName == "X")
+                {
+                    for (var i = 0; i < HomChrom2.GeneLocusList.Count; i++)
+                    {
+                        if (HomChrom2.GeneLocusList[i].GeneName == "Xarray")
+                        {
+                            //Console.WriteLine("X array found!");
+                            HomChrom2.GeneLocusList[i].Traits.TryGetValue("Distortion", out distortion);
+                            var max = (Cas9level > distortion) ? distortion : Cas9level;
+
+                            if (max >= Simulation.random.Next(0, 101) && HomChrom2.GeneLocusList[i].AlleleName == "WT")
+                            {
+                                //inherit the Y
+                                //Console.WriteLine("Y inherited");
+                                this.ChromosomeName = HomChrom1.ChromosomeName;
+                                this.HomologousPairName = HomChrom1.HomologousPairName;
+                                this.GeneLocusList = new List<GeneLocus>();
+
+                                foreach (GeneLocus OldGL in HomChrom1.GeneLocusList)
+                                {
+                                    GeneLocus NewGL = new GeneLocus(OldGL);
+                                    this.GeneLocusList.Add(NewGL);
+                                }
+                                return;
+                            }
+                            else
+                            {
+                                //inherit the (modified) X
+                                //Console.WriteLine("X mod inherited");
+                                this.ChromosomeName = HomChrom2.ChromosomeName;
+                                this.HomologousPairName = HomChrom2.HomologousPairName;
+                                this.GeneLocusList = new List<GeneLocus>();
+
+                                foreach (GeneLocus OldGL in HomChrom2.GeneLocusList)
+                                {
+                                    GeneLocus NewGL = new GeneLocus(OldGL);
+                                    if (NewGL.GeneName == "Xarray" && NewGL.AlleleName == "WT")
+                                    {
+                                        distortion = distortion - 5;
+                                        if (distortion < 0)
+                                        {
+                                            distortion = 0;
+                                            NewGL.AlleleName = "R2";
+                                        }
+
+                                        NewGL.Traits["Distortion"] = distortion;
+
+                                    }
+                                    this.GeneLocusList.Add(NewGL);
+                                }
+                                return;
+                            }
+                        }
+                    }
+
+                }
+                else { Console.WriteLine("No X chromsomes???"); }
+               
+
+                FairSex:
+
+
                 if (Simulation.random.Next(0, 2) != 0)
                 {
                     this.ChromosomeName = HomChrom1.ChromosomeName;
@@ -204,10 +326,10 @@ namespace DrivesMedfly
                         GeneLocus NewGL = new GeneLocus(OldGL);
                         GeneLocusList.Add(NewGL);
                     }
-
                 }
+
             }
-            else
+            else //AUTOSOMES
             {
                 this.ChromosomeName = HomChrom1.ChromosomeName;
                 this.HomologousPairName = HomChrom1.HomologousPairName;

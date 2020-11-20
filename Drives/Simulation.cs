@@ -41,7 +41,7 @@ namespace DrivesMedfly
         { 
             string pathdesktop = (string)Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             pathdesktop = pathdesktop + "/model";
-            string pathString = System.IO.Path.Combine(pathdesktop, "Output_ffer.csv");
+            string pathString = System.IO.Path.Combine(pathdesktop, "Output_ffer_Xshred.csv");
             Console.WriteLine("Writing output to: " + pathString);
             File.Create(pathString).Dispose();
 
@@ -188,6 +188,8 @@ namespace DrivesMedfly
                         }
                         #endregion
 
+                        //Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Eggs", "NA", "NA", Eggs.Count.ToString(), "all");
+
                         Eggs.Clear();
 
                     }
@@ -256,6 +258,11 @@ namespace DrivesMedfly
             TRAb.Traits.Add("Conservation",99);
             TRAb.Traits.Add("Hom_Repair", 95);
 
+            GeneLocus Xarray_a = new GeneLocus("Xarray", 2, "WT");
+            Xarray_a.Traits.Add("Distortion", 95);
+            GeneLocus Xarray_b = new GeneLocus("Xarray", 2, "WT");
+            Xarray_b.Traits.Add("Distortion", 95);
+
             Chromosome ChromXa = new Chromosome("X", "Sex");
             Chromosome ChromXb = new Chromosome("X", "Sex");
             Chromosome Chrom2a = new Chromosome("2", "2");
@@ -268,6 +275,9 @@ namespace DrivesMedfly
        
             Chrom3a.GeneLocusList.Add(TRAa);
             Chrom3b.GeneLocusList.Add(TRAb);
+
+            ChromXa.GeneLocusList.Add(Xarray_a);
+            ChromXb.GeneLocusList.Add(Xarray_b);
 
             WTFemale.ChromosomeListA.Add(ChromXa);
             WTFemale.ChromosomeListB.Add(ChromXb);
@@ -299,7 +309,7 @@ namespace DrivesMedfly
 
             GeneLocus FFD = new GeneLocus("FFER", 1, "Construct");
             FFD.Traits.Add("transgene_Cas9", 95);
-            FFD.Traits.Add("transgene_TRA", 0);
+            FFD.Traits.Add("transgene_Xarray", 1);
             FFD.Traits.Add("transgene_FFER", 1);
             FFD.Traits.Add("Hom_Repair", 95);
 

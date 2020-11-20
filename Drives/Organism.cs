@@ -182,8 +182,6 @@ namespace DrivesMedfly
 
         }
 
-
-
         public string GetGenotype(string WhichGene)
         {
             string output = "error";
@@ -581,6 +579,11 @@ namespace DrivesMedfly
                     }
                 }
             }
+
+            //this sucks, for sex specificity and should be a property of the transgene.
+            //if (whichtransgene == "transgene_Cas9" && this.GetSex() == "female")
+            //{ return 0; }
+            // rewrite
 
             if (level > 100)
                 return 100;
