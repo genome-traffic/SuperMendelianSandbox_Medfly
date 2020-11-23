@@ -188,6 +188,8 @@ namespace DrivesMedfly
                         }
                         #endregion
 
+                        Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Eggs", "NA", "NA", Eggs.Count.ToString(), "all");
+
                         Eggs.Clear();
 
                     }
