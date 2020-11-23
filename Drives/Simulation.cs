@@ -25,12 +25,12 @@ namespace DrivesMedfly
         public int GlobalEggsPerFemale = 50;
         public int Sample = 47;
 
-        public bool ApplyIntervention = true;
+  
         public int StartingNumberOfWTFemales = 250;
         public int StartingNumberOfWTMales = 250;
         public int StartIntervention = 2;
-        public int EndIntervention = 2;
-        public int InterventionReleaseNumber = 125;
+        public int EndIntervention = 20;
+        public int InterventionReleaseNumber = 5000;
 
         string[] Track = {"TRA","FFER"};
         //string[] Track = { "ZPG" };
@@ -41,7 +41,7 @@ namespace DrivesMedfly
         { 
             string pathdesktop = (string)Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             pathdesktop = pathdesktop + "/model";
-            string pathString = System.IO.Path.Combine(pathdesktop, "Output_ffer.csv");
+            string pathString = System.IO.Path.Combine(pathdesktop, "Output_SIT.csv");
             Console.WriteLine("Writing output to: " + pathString);
             File.Create(pathString).Dispose();
 
@@ -57,22 +57,19 @@ namespace DrivesMedfly
                     Adults.Clear();
                     Eggs.Clear();
 
-                    if (ApplyIntervention)
-                        Populate_with_WT();
-                    else
-                        Populate_with_Setup();
-
+                    Populate_with_WT();
+                    
                     Shuffle.ShuffleList(Adults);
 
                     for (int cGenerations = 1; cGenerations <= Generations; cGenerations++)
                     {
-                        if (ApplyIntervention)
-                        {
-                            if ((cGenerations >= StartIntervention) && (cGenerations <= EndIntervention))
+                        
+                            if (cGenerations >= StartIntervention)
                             {
                                 Intervention();
                             }
-                        }
+
+
                         #region output data to file
 
                         //------------------------ Genotypes -------
@@ -118,15 +115,22 @@ namespace DrivesMedfly
                             Fwriter.WriteLine("{0},{1},{2},{3},sample", cIterations, cGenerations, result.Name, result.Count);
                         }
 
-                        //------------------------- Sex -----------
+                        //------------------------- Sex & SIT males-----------
                         int numberofallmales = 0;
                         int numberofallfemales = 0;
+                        int numberofsterileMales = 0;
                         foreach (Organism O in Adults)
                         {
                             if (O.GetSex() == "female")
                                 numberofallfemales++;
                             else
+                            {
+                         
+                                if (O.sterile)
+                                numberofsterileMales++;
+                                else
                                 numberofallmales++;
+                            }   
                         }
                         Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex", "Males", "NA", numberofallmales, "all");
                         Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex", "Females", "NA", numberofallfemales, "all");
@@ -164,9 +168,8 @@ namespace DrivesMedfly
                         }
                         Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex_Karyotype", "XX", "NA", numberofXX, "all");
                         Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex_Karyotype", "XY", "NA", numberofXY, "all");
-
-
-
+                        Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "SterileMales", "NA", "NA", numberofsterileMales, "all");
+          
                         #endregion
 
                         Shuffle.ShuffleList(Adults);
@@ -188,6 +191,7 @@ namespace DrivesMedfly
                         }
                         #endregion
 
+                       
                         Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Eggs", "NA", "NA", Eggs.Count.ToString(), "all");
 
                         Eggs.Clear();
@@ -215,28 +219,13 @@ namespace DrivesMedfly
             }
         }
 
-        public void Populate_with_Setup()
-        {
-            for (int i = 0; i < 300; i++)
-            {
-                Adults.Add(new Organism(GenerateWTFemale()));
-            }
-            for (int i = 0; i < 120; i++)
-            {
-                Adults.Add(new Organism(GenerateWTMale()));
-            }
-
-            for (int i = 0; i < 60; i++)
-            {
-                Adults.Add(new Organism(Generate_DriveMale()));
-            }
-        }
-
+       
         public void Intervention()
         {
-            for (int i = 0; i < InterventionReleaseNumber; i++)
+            for (int i = 0; i < InterventionReleaseNumber;i++) 
             {
-                Adults.Add(new Organism(Generate_DriveMale()));
+                Adults.Add(new Organism(Generate_SITMale()));
+                //Console.WriteLine("SIT male released!");
             }
         }
 
@@ -279,6 +268,7 @@ namespace DrivesMedfly
             WTFemale.ChromosomeListB.Add(Chrom3b);
 
             WTFemale.MaternalTRA = true;
+            WTFemale.sterile = false;
 
             return WTFemale;
         }
@@ -291,22 +281,18 @@ namespace DrivesMedfly
             ChromY.GeneLocusList.Add(MaleFactor);
 
             WTMale.ChromosomeListA[0] = ChromY;
-      
+            WTMale.sterile = false;
+
             return WTMale;
         }
 
-        public Organism Generate_DriveMale()
+        public Organism Generate_SITMale()
         {
-            Organism FFD_Male = new Organism(GenerateWTMale());
-
-            GeneLocus FFD = new GeneLocus("FFER", 1, "Construct");
-            FFD.Traits.Add("transgene_Cas9", 95);
-            FFD.Traits.Add("transgene_TRA", 0);
-            FFD.Traits.Add("transgene_FFER", 1);
-            FFD.Traits.Add("Hom_Repair", 95);
-
-            Organism.ModifyAllele(ref FFD_Male.ChromosomeListA, FFD, "WT");
-            return FFD_Male;           
+            Organism SIT_Male = new Organism(GenerateWTMale());
+            
+            SIT_Male.sterile = true;
+        
+            return SIT_Male;           
         }
 
        
@@ -319,6 +305,7 @@ namespace DrivesMedfly
             int EggsPerFemale = GlobalEggsPerFemale;
 
             EggsPerFemale = (int)(EggsPerFemale * Dad.GetFertility() * Mum.GetFertility());
+            //Console.WriteLine(EggsPerFemale.ToString() + " is the fertility.");
 
                 for (int i = 0; i < EggsPerFemale; i++)
                 {

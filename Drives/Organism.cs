@@ -11,6 +11,7 @@ namespace DrivesMedfly
         public List<Chromosome> ChromosomeListB;
 
         public bool MaternalTRA;
+        public bool sterile;
 
         public static Random randomorg = new Random();
 
@@ -20,6 +21,7 @@ namespace DrivesMedfly
             this.ChromosomeListA = new List<Chromosome>();
             this.ChromosomeListB = new List<Chromosome>();
             this.MaternalTRA = new bool();
+            this.sterile = new bool();
         }
 
         //new organism (clone) 
@@ -39,7 +41,7 @@ namespace DrivesMedfly
             });
 
             this.MaternalTRA = Old.MaternalTRA;
-
+            this.sterile = Old.sterile;
         }
 
         //new organism (sex)
@@ -50,6 +52,8 @@ namespace DrivesMedfly
 
             this.ChromosomeListA.AddRange(Dad.GetGametChromosomeList());
             this.ChromosomeListB.AddRange(Mum.GetGametChromosomeList());
+
+            this.sterile = false;
 
             //determine maternal TRA provision
 
@@ -182,8 +186,6 @@ namespace DrivesMedfly
 
         }
 
-
-
         public string GetGenotype(string WhichGene)
         {
             string output = "error";
@@ -272,24 +274,17 @@ namespace DrivesMedfly
 
             return output;
         }
+
         public float GetFertility()
         {
             int fer = 100;
 
-            // recessive female fertility
-            if (this.GetSex() == "female")
+            if (this.sterile == true)
             {
-                if (this.AlleleHomozygous("FFER", "Construct"))
-                { fer = 0; }
-                else if (this.AlleleHomozygous("FFER", "R2"))
-                { fer = 0; }
-                else if (this.AlleleHeterozygous("FFER", "Construct", "FFER", "R2"))
-                { fer = 0; }
+                //Console.WriteLine("sterile male!");
+                fer = 0;
             }
-
-            //white
-            //if (!(this.AllelePresent("FFER", "WT")))
-            //{ fer = 95; }
+            
 
             float ffer = (float) fer / 100;
             return ffer;
