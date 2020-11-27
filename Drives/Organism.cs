@@ -148,8 +148,16 @@ namespace DrivesMedfly
         {
             string sex = "female";
 
+
+            //role of dominant moy
+            if (this.GetTransgeneLevel("MOY") > 0)
+            {
+                sex = "male";
+                goto TRArole;
+            }
+
             //role of sex chromosomes
-            foreach (Chromosome Chrom in this.ChromosomeListA)
+                foreach (Chromosome Chrom in this.ChromosomeListA)
             {
                 foreach (GeneLocus GL in Chrom.GeneLocusList)
                 {
@@ -168,6 +176,10 @@ namespace DrivesMedfly
                     goto TRArole;
                 }
             }
+
+
+
+
 
             TRArole: //role of tra
 
